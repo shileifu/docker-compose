@@ -1,12 +1,3 @@
-# docker-compose
-This is a docker compose instance for starrocks. This deploys starrocks and start one fe instance, three be instances.
-To run starrocks on your linux machine:
-```shell
-docker compose up
-```
-## Cluster
-Let's see our docker-compose.yaml first.
-```yaml
 version: "3.9"
 services:
   starrocks-fe:
@@ -79,28 +70,3 @@ services:
     volumes:
       - ./config/be.conf:/opt/starrocks/be/conf/be.conf
       #- ./data/starrocks-be3/storage:/opt/starrocks/be/storage
-```
-We have 1 fe server and 3 be servers.
-the part of annotation is about defines mount host paths or named volumes that be accessible by fe and be. the user start fe and be in docker is starrocks, so when mount volumes we must use root to start fe and be.
-so, when want to use volumes must cancel annotations.
-## Check available
-after started the starrocks ,we should check the cluster status.
-1. connect the cluster.
-Get the IP address about fe through docker inspect. Connect the fe and check all be status.
-```shell
-mysql -h fe_IP -P9030 -uroot
-```
-use show backends check all be status. when be Alive status is true represents the be is ok.
-```shell
-show backends;
-```
-## Problems
-when up the cluster print as belows:
-```shell
- ERROR 2003 (HY000): Can't connect to MySQL server on 'starrocks-fe:9030' (111)
-```
-that may be be start quickly than fe. you can re-compose up or add the be to fe manually finish it. The command as follows when you connect the fe service.
-```
-   ADD BACKEDN "be_ip:9050";
-```
-so as the command you should replace the be_ip as real docker ip.
