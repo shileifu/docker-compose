@@ -45,44 +45,11 @@ services:
     volumes:
       - ./config/be.conf:/opt/starrocks/be/conf/be.conf
       #- ./data/starrocks-be1/storage:/opt/starrocks/be/storage
-  starrocks-be2:
-    image: fushilei/test.be:v1.3
-    #user: root
-    command:
-      - /bin/bash
-      - -c
-      - |
-        sleep 15s;  mysql --connect-timeout 2 -h starrocks-fe -P9030 -uroot -e "alter system add backend \"starrocks-be2:9050\";"
-        /opt/starrocks/be/bin/start_be.sh 
-
-    hostname: starrocks-be2
-    container_name: starrocks-be2
-    depends_on:
-      - "starrocks-fe"
-    volumes:
-      - ./config/be.conf:/opt/starrocks/be/conf/be.conf
-      #- ./data/starrocks-be2/storage:/opt/starrocks/be/storage
-  starrocks-be3:
-    image: fushilei/test.be:v1.3 
-    #user: root
-    command:
-      - /bin/bash
-      - -c
-      - |
-        sleep 15s; mysql --connect-timeout 2 -h starrocks-fe -P9030 -uroot -e "alter system add backend \"starrocks-be3:9050\";"
-        /opt/starrocks/be/bin/start_be.sh 
-
-    hostname: starrocks-be3
-    container_name: starrocks-be3
-    depends_on:
-      - "starrocks-fe"
-    volumes:
-      - ./config/be.conf:/opt/starrocks/be/conf/be.conf
-      #- ./data/starrocks-be3/storage:/opt/starrocks/be/storage
 ```
-We have 1 fe server and 3 be servers.
+We have 1 fe server and 1 be servers.
 the part of annotation is about defines mount host paths or named volumes that be accessible by fe and be. the user start fe and be in docker is starrocks, so when mount volumes we must use root to start fe and be.
-so, when want to use volumes must cancel annotations.
+so, when want to use volumes must cancel annotations.  
+If you want to use 3 be reference the [docker-compose-multiBE.yaml](./docker-compose-multiBE.yaml)
 ## Check available
 after started the starrocks ,we should check the cluster status.
 1. connect the cluster.
